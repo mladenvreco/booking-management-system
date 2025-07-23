@@ -1,6 +1,8 @@
 
 # Kampify – Booking Management App for Rafting Camps
 
+> ⚠️ You need to create a `.env` file with your environment variables.
+
 Kampify is a modern web application built for internal use by rafting camps to streamline and simplify the booking process. It is tailored to handle multiple users with different access levels and provides all necessary tools for managing reservations, availability, reporting, and more.
 
 ## 🌟 Features
