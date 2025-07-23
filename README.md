@@ -65,7 +65,7 @@ This application is built for **rafting camps** and their internal teams – fro
 1. Clone the repo:
 ```
    bash
-   git clone https://github.com/yourusername/kampify.git
+   git clone https://github.com/mladenvreco/kampify.git
    cd kampify
    npm install
    # or
@@ -85,8 +85,8 @@ Created by Mladen Vrećo
 
 📍 Foča, Bosnia and Herzegovina
 
-💼 Frontend Developer | UI/UX Enthusiast
+💼 Frontend Developer
 
 🌐 vreco.vercel.app
 
-📧 [vrecom00@gmail.com] 
+📧 vrecom00@gmail.com 
