@@ -65,8 +65,8 @@ This application is built for **rafting camps** and their internal teams – fro
 1. Clone the repo:
 ```
    bash
-   git clone https://github.com/mladenvreco/kampify.git
-   cd kampify
+   git clone https://github.com/mladenvreco/booking-management-system.git
+   cd booking-management-system
    npm install
    # or
    yarn install
