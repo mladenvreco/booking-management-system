@@ -1,0 +1,37 @@
+.qodo
+.env
+.env.local
+.env.*.local
+node_modules
+dist
+build
+*.log
+.DS_Store
+Thumbs.db
+*.zip
+*.rar
+*.7z
+*.log
+.DS_Store
+*.jar
+# VS Code settings
+.vscode/
+
+# system folders
+.idea/
+*.swp
+
+# Supabase CLI binary
+supabase/bin/
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS specific
+ehthumbs.db
+Desktop.ini
+
+# Large binaries accidentally committed
+*.exe
+*.bin
