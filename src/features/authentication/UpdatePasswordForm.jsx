@@ -31,9 +31,10 @@ function UpdatePasswordForm() {
           id="password"
           // this makes the form better for password managers
           autoComplete="current-password"
-          disabled={isUpdating}
+          // disabled={isUpdating}
+          disabled={true}
           {...register("password", {
-            required: "This field is required",
+            required: "Obavezno polje",
             minLength: {
               value: 8,
               message: "Password needs a minimum of 8 characters",
@@ -50,9 +51,10 @@ function UpdatePasswordForm() {
           type="password"
           autoComplete="new-password"
           id="passwordConfirm"
-          disabled={isUpdating}
+          // disabled={isUpdating}
+          disabled={true}
           {...register("passwordConfirm", {
-            required: "This field is required",
+            required: "Obavezno polje",
             validate: (value) =>
               getValues().password === value || "Passwords need to match",
           })}

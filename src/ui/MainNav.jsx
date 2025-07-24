@@ -57,15 +57,15 @@ function MainNav() {
     <nav>
       <NavList>
         <li>
-          <StyledNavLink to="/pocetna">
-            <HiOutlineHome />
-            <span>Preuzimanje</span>
-          </StyledNavLink>
-        </li>
-        <li>
           <StyledNavLink to="/rezervacije">
             <HiOutlineCalendarDays />
             <span>Rezervacije</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/preuzimanje">
+            <HiOutlineHome />
+            <span>Preuzimanje</span>
           </StyledNavLink>
         </li>
         <li>

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useUser } from "../features/authentication/useUser";
 import Spinner from "./Spinner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
 const FullPage = styled.div`
@@ -13,15 +13,20 @@ const FullPage = styled.div`
 `;
 
 function ProtectedRoute({ children }) {
-  const { isLoading, isAuthenticated } = useUser();
+  const { isLoading, isAuthenticated, user } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  useEffect(
-    function () {
-      if (!isAuthenticated && !isLoading) navigate("/login");
-    },
-    [navigate, isLoading, isAuthenticated]
-  );
+  useEffect(() => {
+    if (!isAuthenticated && !isLoading) navigate("/login");
+    if (
+      isAuthenticated &&
+      user?.email === "vrecom00@gmail.com" &&
+      location.pathname !== "/preuzimanje"
+    ) {
+      navigate("/preuzimanje", { replace: true });
+    }
+  }, [navigate, isLoading, isAuthenticated, user, location.pathname]);
 
   if (isLoading)
     return (

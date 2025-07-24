@@ -11,6 +11,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { useState } from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
 import Logo from "./Logo";
+import { useUser } from "../features/authentication/useUser";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -116,15 +117,15 @@ function MainNav() {
       </HamburgerButton>
       <NavList isOpen={isOpen}>
         <li>
-          <StyledNavLink to="/pocetna" onClick={() => setIsOpen(false)}>
-            <HiOutlinePrinter />
-            <span>Preuzimanje</span>
-          </StyledNavLink>
-        </li>
-        <li>
           <StyledNavLink to="/rezervacije" onClick={() => setIsOpen(false)}>
             <HiOutlineCalendarDays />
             <span>Rezervacije</span>
+          </StyledNavLink>
+        </li>
+        <li>
+          <StyledNavLink to="/preuzimanje" onClick={() => setIsOpen(false)}>
+            <HiOutlinePrinter />
+            <span>Preuzimanje</span>
           </StyledNavLink>
         </li>
         <li>
@@ -151,13 +152,19 @@ function MainNav() {
 }
 
 function Header() {
+  const { user } = useUser();
   return (
     <StyledHeader>
       <LogoContanier>
         <Logo size="8rem" />
       </LogoContanier>
-      <MainNav />
-      <HeaderMenu />
+      {user?.email !== "vrecom00@gmail.com" && (
+        <>
+          <MainNav />
+          <HeaderMenu />
+        </>
+      )}
+
       {/* <Logo></Logo> */}
     </StyledHeader>
   );

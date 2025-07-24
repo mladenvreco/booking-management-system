@@ -26,27 +26,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  // useEffect(() => {
-  //   const initNotifications = async () => {
-  //     const permission = await Notification.requestPermission();
-  //     if (permission === "granted") {
-  //       console.log("Notifikacije dozvoljene");
-  //       await registerFCMToken(); // sačuvaj token u Supabase
-  //     } else {
-  //       console.warn("Korisnik nije dozvolio notifikacije");
-  //     }
-  //   };
-
-  //   initNotifications();
-
-  //   // Listen for poruke dok je aplikacija otvorena
-  //   onMessage((payload) => {
-  //     console.log("Foreground message:", payload);
-  //     const { title, body } = payload.notification;
-  //     new Notification(title, { body });
-  //   });
-  // }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
@@ -60,8 +39,8 @@ function App() {
               </ProtectedRoute>
             }
           >
-            <Route index element={<Navigate replace to="pocetna" />} />
-            <Route path="pocetna" element={<Dashboard />} />
+            <Route index element={<Navigate replace to="rezervacije" />} />
+            <Route path="preuzimanje" element={<Dashboard />} />
             <Route path="rezervacije" element={<Bookings />} />
             <Route path="rezervacije/:bookingId" element={<Booking />} />
             <Route path="bungalovi" element={<Cabins />} />

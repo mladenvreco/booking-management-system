@@ -154,7 +154,7 @@ function DashboardLayout({ startDate, endDate }) {
               // Return the formatted string
               return `${aktivnost.day_number}: Aktivnost(${
                 aktivnostName || "Nepoznato"
-              }), Broj gostiju(${aktivnost.aktivnost.brojGostiju || "n/a"})`
+              }), Broj gostiju(${aktivnost.aktivnost.brojGostiju || "/"})`
                 .replace(/č/g, "c")
                 .replace(/ć/g, "c")
                 .replace(/đ/g, "dj")
@@ -270,14 +270,7 @@ function DashboardLayout({ startDate, endDate }) {
     // Process each chunk
     dateChunks.forEach((chunk, chunkIndex) => {
       // Create headers array for this chunk
-      const headers = [
-        "Ime",
-        "Broj gostiju",
-        "Vegani",
-        "Avans",
-        "Ukupna cijena",
-        "Bungalov",
-      ];
+      const headers = ["Ime", "Broj gostiju", "Vegani", "Bungalov"];
 
       // Add date columns for each day in this chunk
       chunk.forEach((date) => {
@@ -304,11 +297,9 @@ function DashboardLayout({ startDate, endDate }) {
 
           booking.brojGostiju + booking.djeca,
           booking.brojVegana || 0,
-          booking.avans,
-          booking.ukupnoZaNaplatu,
           booking.rezervacija_bungalovi
             ?.map((b) => b.bungalovi?.imeBungalova)
-            .join(", ") || "N/A",
+            .join(", ") || "/",
         ];
 
         // Add daily details for each date in this chunk
@@ -362,21 +353,22 @@ function DashboardLayout({ startDate, endDate }) {
       let totalUkupnoZaNaplatu = 0;
       rows.forEach((row) => {
         row.forEach((cell, index) => {
-          // Skip name, bungalov, and date columns
-          if (index !== 0 && index !== 5 && !(index % 6 === 0)) {
+          // Skip name, bungalov, and date label columns
+          if (
+            index !== 0 && // not Ime
+            index !== 3 && // not Bungalov
+            !(index >= 4 && (index - 4) % 6 === 0) // not a date label column
+          ) {
             totals[index] += Number(cell) || 0;
           }
         });
-        // Add to total ukupnoZaNaplatu
-        totalUkupnoZaNaplatu += Number(row[4]) || 0;
       });
 
       // Create totals row for this chunk
       const totalRow = totals.map((total, index) => {
         if (index === 0) return "UKUPNO";
-        if (index === 5) return ""; // Skip bungalov column
-        if (index % 6 === 0) return ""; // Skip date columns
-        if (index === 4) return totalUkupnoZaNaplatu; // Use the calculated total for ukupnoZaNaplatu
+        if (index === 3) return ""; // Skip bungalov column
+        if (index >= 4 && (index - 4) % 6 === 0) return ""; // Skip date label columns
         return total;
       });
 
@@ -413,9 +405,7 @@ function DashboardLayout({ startDate, endDate }) {
           0: { cellWidth: "auto" }, // Ime
           1: { cellWidth: "auto" }, // Broj gostiju
           2: { cellWidth: "auto" }, // Vegani
-          3: { cellWidth: "auto" }, // Avans
-          4: { cellWidth: "auto" }, // Ukupna cijena
-          5: { cellWidth: "auto" }, // Bungalov
+          3: { cellWidth: "auto" }, // Bungalov
         },
         // Add dynamic column styles for all date columns
         didParseCell: function (data) {
