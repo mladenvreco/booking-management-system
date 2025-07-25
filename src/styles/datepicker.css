@@ -1,0 +1,44 @@
+/* Osnovni stilovi za datepicker */
+.react-datepicker {
+  font-size: 16px;
+  padding: 0.6rem;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  width: auto;
+  max-width: 100%;
+}
+
+.react-datepicker__day,
+.react-datepicker__day-name {
+  font-size: 1.1rem;
+  line-height: 2.4rem;
+  width: 3rem;
+  margin: 0.1rem;
+  text-align: center;
+}
+
+.react-datepicker__header {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Stilovi za manje ekrane - smanji fontove i dimenzije kalendara */
+@media (max-width: 600px) {
+  .react-datepicker {
+    font-size: 12px; /* manji font */
+    padding: 0.3rem;
+  }
+
+  .react-datepicker__day,
+  .react-datepicker__day-name {
+    font-size: 0.9rem; /* manji font za dane */
+    line-height: 1.8rem;
+    width: 1.8rem; /* manja širina dana */
+    margin: 0.05rem;
+  }
+
+  .react-datepicker__header {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+  }
+}

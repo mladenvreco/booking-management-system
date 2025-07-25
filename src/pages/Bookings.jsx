@@ -1,54 +1,53 @@
-import Heading from "../ui/Heading";
-import Row from "../ui/Row";
-import BookingTable from "../features/bookings/BookingTable";
-import AddBooking from "../features/bookings/AddBooking";
-import Input from "../ui/Input";
-import { useState, useEffect } from "react";
-import DatePicker from "react-datepicker";
+import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import Button from "../ui/Button";
+import AddBooking from "../features/bookings/AddBooking";
+import BookingTable from "../features/bookings/BookingTable";
+import DateComponent from "../ui/Date";
+import Heading from "../ui/Heading";
+import Input from "../ui/Input";
+import Row from "../ui/Row";
+import { useIsMobile } from "../hooks/useIsMobile";
+
+function parseValidDate(input) {
+  if (!input) return null;
+  const date = new Date(input);
+  if (date.toString() === "Invalid Date") return null;
+  return date;
+}
 
 function Bookings() {
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const isMobile = useIsMobile();
 
-  // Load saved dates from localStorage when component mounts
   useEffect(() => {
     const savedStartDate = localStorage.getItem("bookingsStartDate");
     const savedEndDate = localStorage.getItem("bookingsEndDate");
-
-    if (savedStartDate) {
-      setStartDate(new Date(savedStartDate));
-    }
-
-    if (savedEndDate) {
-      setEndDate(new Date(savedEndDate));
-    }
-
-    // Load saved search term if you want to persist that too
     const savedSearchTerm = localStorage.getItem("bookingsSearchTerm");
-    if (savedSearchTerm) {
-      setSearchTerm(savedSearchTerm);
+
+    if (savedStartDate && savedEndDate) {
+      const parsedStartDate = parseValidDate(savedStartDate);
+      const parsedEndDate = parseValidDate(savedEndDate);
+      if (parsedStartDate && parsedEndDate) {
+        setStartDate(parsedStartDate);
+        setEndDate(parsedEndDate);
+      }
     }
+
+    if (savedSearchTerm) setSearchTerm(savedSearchTerm);
   }, []);
 
-  // Save dates to localStorage whenever they change
   useEffect(() => {
-    if (startDate) {
+    if (startDate && endDate) {
       localStorage.setItem("bookingsStartDate", startDate.toISOString());
-    } else {
-      localStorage.removeItem("bookingsStartDate");
-    }
-
-    if (endDate) {
       localStorage.setItem("bookingsEndDate", endDate.toISOString());
     } else {
+      localStorage.removeItem("bookingsStartDate");
       localStorage.removeItem("bookingsEndDate");
     }
   }, [startDate, endDate]);
 
-  // Save search term to localStorage when it changes
   useEffect(() => {
     if (searchTerm) {
       localStorage.setItem("bookingsSearchTerm", searchTerm);
@@ -57,55 +56,75 @@ function Bookings() {
     }
   }, [searchTerm]);
 
-  const resetDates = () => {
-    setStartDate(null);
-    setEndDate(null);
-    // Local storage values will be removed by the useEffect
-  };
-
   return (
     <>
       <Heading as="h1">Sve rezervacije</Heading>
-      {/* <BookingTableOperations /> */}
 
-      <Row type="horizontal" style={{ alignItems: "flex-end" }}>
-        <AddBooking />
-
-        {/* <BookingTableOperations /> */}
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <p style={{ lineHeight: "1" }}>Pretraga po datumu:</p>
-
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
+      <Row
+        type="horizontal"
+        style={{
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          gap: "1.6rem",
+        }}
+      >
+        {/* DateComponent - na malim ekranima red 1, puni red */}
+        {/* DateComponent - centriran */}
+        <div
+          style={{
+            order: isMobile ? 1 : 2,
+            flexBasis: isMobile ? "100%" : "auto",
+            flexShrink: 0,
+            display: "flex",
+            justifyContent: "center", // centriramo horizontalno
+            alignItems: "center", // centriramo vertikalno ako treba
+          }}
+        >
+          <DateComponent
             startDate={startDate}
+            setStartDate={setStartDate}
             endDate={endDate}
-            placeholderText="Početni datum"
-            dateFormat="dd.MM"
-            popperContainer={({ children }) => <div>{children}</div>}
-          />
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            placeholderText="Krajnji datum"
-            dateFormat="dd.MM"
-            popperContainer={({ children }) => <div>{children}</div>}
-          />
+            setEndDate={setEndDate}
+          >
+            Pretraži rezervacije po datumu
+          </DateComponent>
+        </div>
 
-          <Button variation="secondary" size="small" onClick={resetDates}>
-            Resetuj datume
-          </Button>
+        {/* Input - centriran */}
+        <div
+          style={{
+            order: isMobile ? 2 : 1,
+            flexBasis: isMobile ? "100%" : "auto",
+            flexGrow: isMobile ? 0 : 1,
+            minWidth: isMobile ? "auto" : "200px",
+            display: "flex",
+            justifyContent: "center", // centriramo horizontalno
+            alignItems: "center", // vertikalno centriranje
+          }}
+        >
           <Input
             placeholder="Pretraga po imenu rezervacije"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: isMobile ? "100%" : "100%",
+              maxWidth: isMobile ? "300px" : "100%",
+            }}
           />
+        </div>
+
+        {/* AddBooking - na malim ekranima red 3, puni red, levo */}
+        <div
+          style={{
+            order: isMobile ? 3 : 0,
+            flexBasis: isMobile ? "100%" : "auto",
+            flexShrink: 0,
+            display: "flex",
+            justifyContent: isMobile ? "flex-start" : "flex-start",
+          }}
+        >
+          <AddBooking />
         </div>
       </Row>
 

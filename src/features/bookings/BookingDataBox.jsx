@@ -1,22 +1,22 @@
-import styled from "styled-components";
 import { addDays, format } from "date-fns";
-import { enUS } from "date-fns/locale";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import supabase from "../../services/supabase";
-import DataItem from "../../ui/DataItem";
-import Button from "../../ui/Button";
-import { formatCurrency } from "../../utils/helpers";
+import { BsTelephoneForward } from "react-icons/bs";
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiOutlineCurrencyEuro,
   HiOutlineHomeModern,
   HiXMark,
 } from "react-icons/hi2";
-import { BsTelephoneForward } from "react-icons/bs";
-import { MdOutlineContactMail } from "react-icons/md";
 import { LuVegan } from "react-icons/lu";
+import { MdOutlineContactMail } from "react-icons/md";
+import { useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import supabase from "../../services/supabase";
+import Button from "../../ui/Button";
+import DataItem from "../../ui/DataItem";
+import { getCustomLocale } from "../../utils/customLocale";
+import { formatCurrency } from "../../utils/helpers";
 
 // --- Styled Components ---
 const StyledBookingDataBox = styled.section`
@@ -247,62 +247,6 @@ const Footer = styled.footer`
   }
 `;
 
-// --- Locale helpers ---
-const customLocale = {
-  ...enUS,
-  localize: {
-    ...enUS.localize,
-    day: (narrowDay) =>
-      ["Ned", "Pon", "Uto", "Sri", "Čet", "Pet", "Sub"][narrowDay],
-    month: (narrowMonth) =>
-      [
-        "Januar",
-        "Februar",
-        "Mart",
-        "April",
-        "Maj",
-        "Jun",
-        "Jul",
-        "Avgust",
-        "Septembar",
-        "Oktobar",
-        "Novembar",
-        "Decembar",
-      ][narrowMonth],
-  },
-};
-const customLocaleTA = {
-  ...enUS,
-  localize: {
-    ...enUS.localize,
-    day: (narrowDay) =>
-      [
-        "Nedjelja",
-        "Ponedjeljak",
-        "Utorak",
-        "Srijeda",
-        "Četvrtak",
-        "Petak",
-        "Subota",
-      ][narrowDay],
-    month: (narrowMonth) =>
-      [
-        "Januar",
-        "Februar",
-        "Mart",
-        "April",
-        "Maj",
-        "Jun",
-        "Jul",
-        "Avgust",
-        "Septembar",
-        "Oktobar",
-        "Novembar",
-        "Decembar",
-      ][narrowMonth],
-  },
-};
-
 // --- Helper functions ---
 const aranzmanMapping = {
   50: "Dnevni rafting",
@@ -515,7 +459,9 @@ function BookingDataBox({ booking, bookingId, children }) {
       for (const day of daysData) {
         if (!day.dayNumber) continue;
         const dayDate = addDays(new Date(validDatumDolaska), day.dayNumber - 1);
-        const dayName = format(dayDate, "EEEE", { locale: customLocaleTA });
+        const dayName = format(dayDate, "EEEE", {
+          locale: getCustomLocale({ fullDayNames: true }),
+        });
         const formattedDayNumber = `${day.dayNumber}-${dayName}`;
         const payload = {
           rezervacije_id: rezervacijeId,
@@ -587,11 +533,11 @@ function BookingDataBox({ booking, bookingId, children }) {
             </div>
             <p>
               {format(new Date(validDatumDolaska), "EEE, dd. MMM yyyy.", {
-                locale: customLocale,
+                locale: getCustomLocale(),
               })}
               &nbsp;&mdash;&nbsp;
               {format(new Date(validDatumOdlaska), "EEE, dd. MMM yyyy.", {
-                locale: customLocale,
+                locale: getCustomLocale(),
               })}
             </p>
           </Header>
@@ -666,7 +612,7 @@ function BookingDataBox({ booking, bookingId, children }) {
             <p>
               Rezervacija napravljena u{" "}
               {format(new Date(validCreatedAt), "EEE, dd. MMM", {
-                locale: customLocale,
+                locale: getCustomLocale(),
               })}
               {creator_name && (
                 <span>
@@ -693,7 +639,7 @@ function BookingDataBox({ booking, bookingId, children }) {
             >
               {days[dayIndex] && !isNaN(new Date(days[dayIndex]))
                 ? format(new Date(days[dayIndex]), "EEEE, dd. MMM", {
-                    locale: customLocaleTA,
+                    locale: getCustomLocale({ fullDayNames: true }),
                   }) + (dayIndex === 0 ? " (dan dolaska)" : "")
                 : "Neispravan datum"}
             </p>

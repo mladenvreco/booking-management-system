@@ -1,23 +1,23 @@
-import styled from "styled-components";
+import { HiBell, HiEye, HiPencil, HiTrash } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
-import { HiPencil, HiTrash, HiEye, HiBell } from "react-icons/hi2";
+import styled from "styled-components";
 
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import Menus from "../../ui/Menus";
 import Modal from "../../ui/Modal";
-import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
 
-import { useDeleteBooking } from "./useDeleteBooking";
-import { formatCurrency } from "../../utils/helpers";
 import { format } from "date-fns";
-import supabase from "../../services/supabase";
-import { useEffect, useState } from "react";
-import { useCabins } from "../cabins/useCabins";
-import { enUS } from "date-fns/locale";
-import CreateBookingForm from "./CreateBookingForm";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import supabase from "../../services/supabase";
 import Button from "../../ui/Button";
 import Spinner from "../../ui/Spinner";
+import { getCustomLocale } from "../../utils/customLocale";
+import { formatCurrency } from "../../utils/helpers";
+import { useCabins } from "../cabins/useCabins";
+import CreateBookingForm from "./CreateBookingForm";
+import { useDeleteBooking } from "./useDeleteBooking";
 
 const Cabin = styled.div`
   text-transform: uppercase;
@@ -156,34 +156,6 @@ const ContactWrapper = styled.div`
   }
 `;
 
-const customLocale = {
-  ...enUS,
-  localize: {
-    ...enUS.localize,
-    day: (narrowDay) => {
-      const days = ["Pon", "Uto", "Sri", "Čet", "Pet", "Sub", "Ned"];
-      return days[narrowDay];
-    },
-    month: (narrowMonth) => {
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Maj",
-        "Jun",
-        "Jul",
-        "Avg",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dec",
-      ];
-      return months[narrowMonth];
-    },
-  },
-};
-
 function prvoSlovoVeliko(str) {
   return str
     .split(" ")
@@ -265,11 +237,11 @@ function BookingRow({ booking, showActions = true }) {
           </span>
           <span>
             {format(new Date(booking.datumDolaska), "dd MMM yyyy", {
-              locale: customLocale,
+              locale: getCustomLocale(),
             })}{" "}
             &mdash;{" "}
             {format(new Date(booking.datumOdlaska), "dd MMM yyyy", {
-              locale: customLocale,
+              locale: getCustomLocale(),
             })}
           </span>
         </Stacked>

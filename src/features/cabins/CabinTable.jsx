@@ -1,12 +1,10 @@
-// import styled from "styled-components";
-
 import Spinner from "../../ui/Spinner";
 import CabinRow from "./CabinRow";
 
-import { useCabins } from "./useCabins";
-import Table from "../../ui/Table";
-import Menus from "../../ui/Menus";
 import Empty from "../../ui/Empty";
+import Menus from "../../ui/Menus";
+import Table from "../../ui/Table";
+import { useCabins } from "./useCabins";
 
 function CabinTable({ startDate, endDate }) {
   const { isLoading, cabins } = useCabins();
