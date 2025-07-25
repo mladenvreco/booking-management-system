@@ -23,17 +23,17 @@
 }
 
 /* Stilovi za manje ekrane - smanji fontove i dimenzije kalendara */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .react-datepicker {
-    font-size: 12px; /* manji font */
+    font-size: 16px;
     padding: 0.3rem;
   }
 
   .react-datepicker__day,
   .react-datepicker__day-name {
-    font-size: 0.9rem; /* manji font za dane */
+    font-size: 1rem;
     line-height: 1.8rem;
-    width: 1.8rem; /* manja širina dana */
+    width: 2rem;
     margin: 0.05rem;
   }
 
