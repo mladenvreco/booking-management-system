@@ -13,6 +13,7 @@ const Input = styled.input`
   }
 
   @media (max-width: 768px) {
+    max-width: 30rem;
     width: 100%;
   }
 `;
