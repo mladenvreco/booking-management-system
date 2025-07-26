@@ -4,7 +4,7 @@ import styled from "styled-components";
 import DashboardLayout from "../features/dashboard/DashboardLayout";
 import { useNextBookings } from "../features/dashboard/useNextBookings";
 import Button from "../ui/Button";
-import Date from "../ui/Date";
+import DateComponent from "../ui/Date";
 import Empty from "../ui/Empty";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
@@ -18,13 +18,8 @@ const StyledExportButtons = styled.div`
   gap: 2.4rem;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Ovdje prebacujemo na kolonu na malim ekranima */
-    justify-content: flex-start; /* Ili left kako si imao */
-    button {
-      padding: 0.5rem;
-      font-size: 1.4rem;
-      width: 100%; /* Opcionalno, da dugmad budu pune širine */
-    }
+    flex-direction: column;
+    justify-content: flex-start;
   }
 `;
 
@@ -32,10 +27,8 @@ function Dashboard() {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
-  // Fetch bookings here
   const { bookings, isLoading } = useNextBookings(startDate, endDate);
 
-  // Get narednih from URL if needed
   const searchParams = new URLSearchParams(window.location.search);
   let narednih = searchParams.get("narednih");
   if (searchParams.size === 0) narednih = 1;
@@ -57,19 +50,18 @@ function Dashboard() {
       <Heading as="h1">Rezervacije za preuzimanje/štampanje</Heading>
 
       <Row type="horizontal" style={{ alignItems: "flex-end" }}>
-        {/* <DashboardFilter /> */}
         <StyledExportButtons>
           <Button onClick={callExportCSV}>Preuzmi CSV</Button>
           <Button onClick={callExportPDF}>Preuzmi PDF</Button>
         </StyledExportButtons>
-        <Date
+        <DateComponent
           startDate={startDate}
           endDate={endDate}
           setStartDate={setStartDate}
           setEndDate={setEndDate}
         >
           Pretraži rezervacije po datumu
-        </Date>
+        </DateComponent>
       </Row>
 
       <DashboardLayout

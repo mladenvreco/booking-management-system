@@ -17,28 +17,28 @@ import { createEditBooking } from "../../services/apiBookings";
 import styled from "styled-components";
 import supabase from "../../services/supabase";
 
-const StyledDatePickerWrapper = styled.div`
-  .react-datepicker-wrapper {
-    width: 100%;
-  }
+// const StyledDatePickerWrapper = styled.div`
+//   .react-datepicker-wrapper {
+//     width: 100%;
+//   }
 
-  .react-datepicker__input-container input {
-    width: 100%;
-    font-size: 1.4rem;
-    padding: 0.8rem 1.2rem;
-    border: 1px solid var(--color-grey-300);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--color-grey-0);
-    box-shadow: var(--shadow-sm);
-  }
+//   .react-datepicker__input-container input {
+//     width: 100%;
+//     font-size: 1.4rem;
+//     padding: 0.8rem 1.2rem;
+//     border: 1px solid var(--color-grey-300);
+//     border-radius: var(--border-radius-sm);
+//     background-color: var(--color-grey-0);
+//     box-shadow: var(--shadow-sm);
+//   }
 
-  @media (max-width: 768px) {
-    .react-datepicker__input-container input {
-      max-width: 20rem;
-      width: 100%;
-    }
-  }
-`;
+//   @media (max-width: 768px) {
+//     .react-datepicker__input-container input {
+//       max-width: 20rem;
+//       width: 100%;
+//     }
+//   }
+// `;
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -177,10 +177,8 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
           .single();
 
         if (error) {
-          console.error("Error fetching additional booking info:", error);
           return;
         }
-        console.log(data);
 
         // Set both form values and local state
         setIsVikend(data.isVikend || false);
@@ -648,13 +646,13 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
         />
       </FormRow>
       <FormRow label="Datum dolaska">
-        <StyledDatePickerWrapper>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            dateFormat="dd-MM-yyyy"
-          />
-        </StyledDatePickerWrapper>
+        {/* <StyledDatePickerWrapper> */}
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          dateFormat="dd-MM-yyyy"
+        />
+        {/* </StyledDatePickerWrapper> */}
       </FormRow>
       <FormRow label="Broj noćenja" error={errors?.brojNocenja?.message}>
         <Input

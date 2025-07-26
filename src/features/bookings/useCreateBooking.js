@@ -116,10 +116,6 @@ export function useCreateBooking() {
         queryClient.invalidateQueries({ queryKey: ["bookings"] });
       },
       onError: (error) => {
-        console.error(
-          "Greška prilikom dodavanja rezervacije:",
-          error?.message || error
-        );
         toast.error("Greška prilikom dodavanja rezervacije.");
       },
     }

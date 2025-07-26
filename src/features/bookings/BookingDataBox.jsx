@@ -18,7 +18,6 @@ import DataItem from "../../ui/DataItem";
 import { getCustomLocale } from "../../utils/customLocale";
 import { formatCurrency } from "../../utils/helpers";
 
-// --- Styled Components ---
 const StyledBookingDataBox = styled.section`
   padding: 3.2rem 4rem;
   overflow: hidden;

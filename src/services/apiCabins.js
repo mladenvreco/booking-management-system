@@ -4,7 +4,6 @@ export async function getCabins() {
   const { data, error } = await supabase.from("bungalovi").select("*");
 
   if (error) {
-    console.error(error);
     throw new Error("Bungalovi se ne mogu učitati.");
   }
 
@@ -28,7 +27,6 @@ export async function createEditCabin(newCabin, id) {
   const { data, error } = await query.select().single();
 
   if (error) {
-    console.error(error);
     throw new Error("Greška pri dodavanju bungalova.");
   }
   return data;
@@ -41,7 +39,6 @@ export async function deleteCabin(id) {
     .eq("id", id);
 
   if (error) {
-    console.error(error);
     throw new Error("Greška pri brisanju bungalova.");
   }
   return data;

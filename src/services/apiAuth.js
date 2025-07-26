@@ -1,4 +1,4 @@
-import supabase, { supabaseUrl, supabase2 } from "./supabase";
+import supabase, { supabase2 } from "./supabase";
 
 export async function signup({ ime, email, password }) {
   let { data, error } = await supabase2.auth.signUp({

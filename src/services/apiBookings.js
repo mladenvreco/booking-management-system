@@ -24,7 +24,6 @@ export const fetchReservations = async ({ sortBy, page = 1 }) => {
     .range(from, to);
 
   if (error) {
-    console.error("Error fetching reservations:", error.message);
     return { data: [], count: 0 };
   }
 
@@ -56,7 +55,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
         .single();
 
     if (existingBookingError) {
-      console.error(existingBookingError);
       throw new Error("Greška pri dohvaćanju postojeće rezervacije.");
     }
 
@@ -76,7 +74,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
       .single();
 
     if (error) {
-      console.error(error);
       throw new Error("Greška pri uređivanju rezervacije.");
     }
 
@@ -120,7 +117,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
       .eq("rezervacija_id", id);
 
     if (deleteError) {
-      console.error(deleteError);
       throw new Error("Greška pri brisanju starih bungalova.");
     }
 
@@ -144,7 +140,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
           .insert(bungalowsData);
 
         if (insertError) {
-          console.error(insertError);
           throw new Error("Greška pri dodavanju novih bungalova.");
         }
       }
@@ -160,10 +155,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
           .single();
 
         if (bungalowError) {
-          console.error(
-            `Error fetching bungalow ${bungalowId}:`,
-            bungalowError
-          );
           continue;
         }
 
@@ -177,7 +168,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
           .eq("id", bungalowId);
 
         if (updateError) {
-          console.error(`Error updating bungalow ${bungalowId}:`, updateError);
         }
       }
     }
@@ -185,7 +175,6 @@ export async function createEditBooking(newBooking, additionalBookingInfo, id) {
     // Return an object with the id
     return { id };
   } catch (error) {
-    console.error("Error in createEditBooking:", error);
     throw error;
   }
 }
@@ -208,7 +197,6 @@ export const getBooking = async (id) => {
     .single();
 
   if (error) {
-    console.error("Neuspjelo učitavanje rezervacije", error.message);
     throw new Error("Neuspjelo učitavanje rezervacije");
   }
 
@@ -230,7 +218,6 @@ export async function getBookingsAfterDate(date) {
     .lte("datumDolaska", date);
 
   if (error) {
-    console.error(error);
     throw new Error("Rezervacije nisu učitane");
   }
 
@@ -287,12 +274,6 @@ export async function getReservationsAfterDate(startDate, endDate) {
     const startDateFormatted = formatDate(startDate);
     const endDateFormatted = formatDate(endDate);
 
-    console.log("Query will use:", {
-      startDateFormatted,
-      endDateFormatted,
-      query: `datumDolaska>=${startDateFormatted} AND datumDolaska<${endDateFormatted}`,
-    });
-
     query = query
       .gte("datumDolaska", startDateFormatted)
       .lt("datumDolaska", endDateFormatted);
@@ -334,7 +315,6 @@ export async function getStaysTodayActivity() {
   // (stay.status === 'checked-in' && isToday(new Date(stay.endDate)))
 
   if (error) {
-    console.error(error);
     throw new Error("Rezervacije nisu učitane");
   }
   return data;
@@ -349,7 +329,6 @@ export async function updateBooking(id, obj) {
     .single();
 
   if (error) {
-    console.error(error);
     throw new Error("Rezervacija nije izmjenjena.");
   }
   return data;
@@ -372,7 +351,6 @@ export async function deleteBooking(id) {
     .single();
 
   if (fetchError) {
-    console.error("Error fetching booking data:", fetchError);
     throw new Error("Rezervacija nije pronađena.");
   }
 
@@ -393,8 +371,7 @@ export async function deleteBooking(id) {
       .single();
 
     if (bungalowError) {
-      console.error(`Error fetching bungalow ${bungalowId}:`, bungalowError);
-      continue; // Skip this bungalow and continue with others
+      continue;
     }
 
     // Remove the dates associated with the booking
@@ -408,7 +385,6 @@ export async function deleteBooking(id) {
       .eq("id", bungalowId);
 
     if (updateError) {
-      console.error(`Error updating bungalow ${bungalowId}:`, updateError);
     }
   }
 
@@ -419,7 +395,6 @@ export async function deleteBooking(id) {
     .eq("id", id);
 
   if (error) {
-    console.error(error);
     throw new Error("Rezervacija nije izbrisana.");
   }
   return data;

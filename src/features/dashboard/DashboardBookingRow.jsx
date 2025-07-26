@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import Table from "../../ui/Table";
 import { format } from "date-fns";
-import { useCabins } from "../cabins/useCabins";
-import Spinner from "../../ui/Spinner";
-import Button from "../../ui/Button";
 import toast from "react-hot-toast";
-import styled from "styled-components";
 import { HiBell } from "react-icons/hi2";
+import styled from "styled-components";
+import Button from "../../ui/Button";
 import Modal from "../../ui/Modal";
-import supabase from "../../services/supabase";
+import Spinner from "../../ui/Spinner";
+import Table from "../../ui/Table";
+import { useCabins } from "../cabins/useCabins";
 
 const Stacked = styled.div`
   display: flex;
@@ -71,7 +69,9 @@ const NoteCell = styled.div`
   }
 `;
 
-const BellIcon = styled(HiBell)`
+const BellIcon = styled(HiBell).withConfig({
+  shouldForwardProp: (prop) => prop !== "hasNote",
+})`
   color: ${(props) => (props.hasNote ? "#ed8936" : "var(--color-grey-400)")};
   font-size: 1.8rem;
   cursor: pointer;
@@ -137,7 +137,6 @@ function DashboardBookingRow({ booking }) {
                 toast.success("Kontakt kopiran!");
               })
               .catch((err) => {
-                console.error("Greška prilikom kopiranja kontakta:", err);
                 toast.error("Greška prilikom kopiranja kontakta.");
               });
           }}

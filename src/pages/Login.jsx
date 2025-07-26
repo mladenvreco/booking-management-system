@@ -7,7 +7,7 @@ const LoginLayout = styled.main`
   min-height: 100vh;
   display: grid;
   grid-template-columns: 48rem;
-  align-content: center;
+  align-content: start;
   justify-content: center;
   gap: 3.2rem;
   background-color: var(--color-grey-50);
@@ -20,6 +20,8 @@ const LoginLayout = styled.main`
 function Login() {
   return (
     <LoginLayout>
+      <br />
+      <br />
       <Logo />
       <Heading as="h4">Uloguj se</Heading>
       <LoginForm />

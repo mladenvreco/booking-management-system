@@ -69,8 +69,6 @@ function Bookings() {
           gap: "1.6rem",
         }}
       >
-        {/* DateComponent - na malim ekranima red 1, puni red */}
-        {/* DateComponent - centriran */}
         <div
           style={{
             order: isMobile ? 1 : 2,
@@ -91,7 +89,6 @@ function Bookings() {
           </DateComponent>
         </div>
 
-        {/* Input - centriran */}
         <div
           style={{
             order: isMobile ? 2 : 1,
@@ -114,14 +111,13 @@ function Bookings() {
           />
         </div>
 
-        {/* AddBooking - na malim ekranima red 3, puni red, levo */}
         <div
           style={{
             order: isMobile ? 3 : 0,
             flexBasis: isMobile ? "100%" : "auto",
             flexShrink: 0,
             display: "flex",
-            justifyContent: isMobile ? "flex-start" : "flex-start",
+            justifyContent: isMobile ? "center" : "flex-start",
           }}
         >
           <AddBooking />

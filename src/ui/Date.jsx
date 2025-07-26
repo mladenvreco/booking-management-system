@@ -36,7 +36,13 @@ const StyledDatePickerInput = styled.input`
   }
 `;
 
-function Date({ children, startDate, setStartDate, endDate, setEndDate }) {
+function DateComponent({
+  children,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) {
   const resetDates = () => {
     setStartDate(null);
     setEndDate(null);
@@ -76,4 +82,4 @@ function Date({ children, startDate, setStartDate, endDate, setEndDate }) {
   );
 }
 
-export default Date;
+export default DateComponent;

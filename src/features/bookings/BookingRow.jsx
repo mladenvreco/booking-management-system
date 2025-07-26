@@ -123,7 +123,9 @@ const NoteCell = styled.div`
   }
 `;
 
-const BellIcon = styled(HiBell)`
+const BellIcon = styled(HiBell).withConfig({
+  shouldForwardProp: (prop) => prop !== "hasNote",
+})`
   color: ${(props) => (props.hasNote ? "#ed8936" : "var(--color-grey-400)")};
   font-size: 1.8rem;
   cursor: pointer;
@@ -218,7 +220,6 @@ function BookingRow({ booking, showActions = true }) {
                   toast.success("Kontakt kopiran!");
                 })
                 .catch((err) => {
-                  console.error("Greška prilikom kopiranja kontakta:", err);
                   toast.error("Greška prilikom kopiranja kontakta.");
                 });
             }}
@@ -322,7 +323,6 @@ function BookingRow({ booking, showActions = true }) {
                     // Step 2: Update the zauzetnadatume for each associated cabin
                     for (const bungalov of booking.bungalovi) {
                       if (!bungalov.id) {
-                        console.error("Bungalov ID is undefined:", bungalov);
                         continue; // Skip this iteration if bungalov.id is undefined
                       }
 
@@ -367,12 +367,7 @@ function BookingRow({ booking, showActions = true }) {
 
                       if (updateError) throw updateError;
                     }
-                  } catch (error) {
-                    console.error(
-                      "Greška prilikom brisanja rezervacije ili ažuriranja datuma:",
-                      error
-                    );
-                  }
+                  } catch (error) {}
                 }}
               />
             </Modal.Window>

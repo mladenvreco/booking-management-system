@@ -17,7 +17,6 @@ function SignupForm() {
       { ime, email, password },
       {
         onSettled: (data, error) => {
-          console.error("Signup error:", error);
           reset();
         },
       }

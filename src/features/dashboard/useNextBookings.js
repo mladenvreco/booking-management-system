@@ -68,7 +68,6 @@ export function useNextBookings(startDate, endDate) {
   });
 
   if (error) {
-    console.error("greska:", error);
   }
 
   return { bookings, isLoading };

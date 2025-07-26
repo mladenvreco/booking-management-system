@@ -109,12 +109,6 @@ const LoadingMessage = styled.div`
   padding: 1rem 0;
 `;
 
-const EmptyMessage = styled.div`
-  text-align: center;
-  padding: 1rem 0;
-  color: #6b7280;
-`;
-
 const StyledTodoList = styled.ul`
   display: flex;
   flex-direction: column;
@@ -189,7 +183,6 @@ function TodoList() {
       }
       setError(null);
     } catch (error) {
-      console.error("Error fetching todos:", error.message);
       setError("Neuspješno učitavanje zadataka");
     } finally {
       setLoading(false);
@@ -211,7 +204,6 @@ function TodoList() {
       await fetchTodos();
       setNewTodo("");
     } catch (error) {
-      console.error("Error adding todo:", error.message);
       setError("Neuspješno dodavanje zadatka");
     } finally {
       setLoading(false);
@@ -229,7 +221,6 @@ function TodoList() {
       // Refresh todos after deleting
       await fetchTodos();
     } catch (error) {
-      console.error("Error deleting todo:", error.message);
       setError("Neuspješno brisanje zadatka");
     } finally {
       setLoading(false);
