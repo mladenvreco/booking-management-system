@@ -27,7 +27,7 @@ export async function createEditCabin(newCabin, id) {
   const { data, error } = await query.select().single();
 
   if (error) {
-    throw new Error("Greška pri dodavanju bungalova.");
+    throw new Error("Greška pri uređivanju bungalova.");
   }
   return data;
 }

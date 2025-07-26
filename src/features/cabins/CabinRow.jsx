@@ -39,11 +39,25 @@ function CabinRow({ cabin }) {
     });
   }
 
+  const formatDate = (date) => {
+    return date.toLocaleDateString("sr-RS", {
+      day: "2-digit",
+      month: "2-digit",
+    });
+  };
+
   return (
     <Table.Row>
       <Bungalov>{cabin.imeBungalova}</Bungalov>
       <BrojKreveta>{cabin.brojKreveta}</BrojKreveta>
       <VrstaBungalova>{cabin.vrstaBungalova}</VrstaBungalova>
+      <div>
+        {cabin.availableDates === null
+          ? "" // Prazan string kada nisu uneseni datumi
+          : cabin.availableDates && cabin.availableDates.length > 0
+          ? `${cabin.availableDates.map(formatDate).join(" ")}`
+          : "Nema dostupnih datuma"}
+      </div>
       <div>
         <Modal>
           <Menus.Menu>
@@ -63,7 +77,7 @@ function CabinRow({ cabin }) {
             </Menus.List>
 
             <Modal.Window name="uredi">
-              <CreateCabinForm cabinToEdit={cabin} />
+              <CreateCabinForm cabinToEdit={cabin.originalCabin || cabin} />
             </Modal.Window>
 
             <Modal.Window name="izbrisi">

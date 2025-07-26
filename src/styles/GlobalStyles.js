@@ -209,6 +209,8 @@ img {
 
 
 
+
+
 `;
 
 export default GlobalStyles;

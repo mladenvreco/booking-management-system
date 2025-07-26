@@ -16,58 +16,72 @@ import { useNavigate } from "react-router-dom";
 import { createEditBooking } from "../../services/apiBookings";
 import styled from "styled-components";
 import supabase from "../../services/supabase";
-
-// const StyledDatePickerWrapper = styled.div`
-//   .react-datepicker-wrapper {
-//     width: 100%;
-//   }
-
-//   .react-datepicker__input-container input {
-//     width: 100%;
-//     font-size: 1.4rem;
-//     padding: 0.8rem 1.2rem;
-//     border: 1px solid var(--color-grey-300);
-//     border-radius: var(--border-radius-sm);
-//     background-color: var(--color-grey-0);
-//     box-shadow: var(--shadow-sm);
-//   }
-
-//   @media (max-width: 768px) {
-//     .react-datepicker__input-container input {
-//       max-width: 20rem;
-//       width: 100%;
-//     }
-//   }
-// `;
+import { StyledDatePickerInput } from "../../ui/Date";
 
 const SelectWrapper = styled.div`
   width: 100%;
 
   @media (max-width: 768px) {
-    max-width: 20rem;
-  }
-
-  .react-datepicker__input-container input {
-    width: 100%;
-    font-size: 1.4rem;
-    padding: 0.8rem 1.2rem;
-    border: 1px solid var(--color-grey-300);
-    border-radius: var(--border-radius-sm);
-    background-color: var(--color-grey-0);
-    box-shadow: var(--shadow-sm);
-  }
-
-  @media (max-width: 768px) {
-    .react-datepicker__input-container input {
-      max-width: 20rem;
-      width: 100%;
-    }
+    max-width: 30rem;
   }
 `;
 
 function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
   const { id: editId, ...editValues } = bookingToEdit;
   const isEditSession = Boolean(editId);
+
+  const removeOldDatesFromCabins = async (bookingToEdit) => {
+    if (!bookingToEdit.bungalovi || bookingToEdit.bungalovi.length === 0)
+      return;
+
+    // Generiši stare datume na osnovu originalnih podataka iz rezervacije
+    const originalStartDate = new Date(bookingToEdit.datumDolaska);
+    const originalEndDate = new Date(bookingToEdit.datumOdlaska);
+    const originalDates = eachDayOfInterval({
+      start: originalStartDate,
+      end: addDays(originalEndDate, -1),
+    }).map((date) => format(date, "yyyy-MM-dd"));
+
+    // Ukloni stare datume iz svih bungalova koji su bili u rezervaciji
+    for (const bungalov of bookingToEdit.bungalovi) {
+      try {
+        // Dohvati trenutne zauzete datume za bungalov
+        const { data: cabinData, error: fetchError } = await supabase
+          .from("bungalovi")
+          .select("zauzetnadatume")
+          .eq("id", bungalov.id)
+          .single();
+
+        if (fetchError) {
+          console.error(
+            `Greška dohvaćanja podataka za bungalov ${bungalov.id}:`,
+            fetchError
+          );
+          continue;
+        }
+
+        // Ukloni stare datume rezervacije
+        const updatedDates = (cabinData.zauzetnadatume || []).filter(
+          (date) => !originalDates.includes(date)
+        );
+
+        // Ažuriraj bazu podataka
+        const { error: updateError } = await supabase
+          .from("bungalovi")
+          .update({ zauzetnadatume: updatedDates })
+          .eq("id", bungalov.id);
+
+        if (updateError) {
+          console.error(
+            `Greška ažuriranja datuma za bungalov ${bungalov.id}:`,
+            updateError
+          );
+        }
+      } catch (error) {
+        console.error(`Neočekivana greška za bungalov ${bungalov.id}:`, error);
+      }
+    }
+  };
 
   const { register, handleSubmit, reset, formState, watch, setValue } = useForm(
     {
@@ -120,7 +134,7 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
   const { createBooking, isCreating } = useCreateBooking();
   const { errors } = formState;
   const brojNocenja = watch("brojNocenja");
-  const { cabins } = useCabins();
+  const { cabins = [] } = useCabins();
   const navigate = useNavigate();
 
   const [additionalBungalows, setAdditionalBungalows] = useState([]);
@@ -282,9 +296,15 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
 
   const isWorking = isCreating || isEditing;
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const isDnevniRafting = data.aranzman === "Dnevni rafting";
 
+    // NOVO: Ukloni stare datume ako editiraš rezervaciju
+    if (isEditSession) {
+      await removeOldDatesFromCabins(bookingToEdit);
+    }
+
+    // ... ostatak koda ostaje isti
     const allBungalows = isDnevniRafting
       ? []
       : [
@@ -646,13 +666,12 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
         />
       </FormRow>
       <FormRow label="Datum dolaska">
-        {/* <StyledDatePickerWrapper> */}
         <DatePicker
           selected={startDate}
           onChange={(date) => setStartDate(date)}
           dateFormat="dd-MM-yyyy"
+          customInput={<StyledDatePickerInput />}
         />
-        {/* </StyledDatePickerWrapper> */}
       </FormRow>
       <FormRow label="Broj noćenja" error={errors?.brojNocenja?.message}>
         <Input
@@ -688,13 +707,14 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
                 name="aranzman"
                 id="aranzman"
                 disabled={isWorking}
+                value={aranzman}
                 {...register("aranzman", {
                   required: "Odabir aranžmana je obavezan",
                   validate: (value) =>
                     value !== "placeholder" || "Odabir aranžmana je obavezan",
                 })}
               >
-                <option value="placeholder" disabled hidden>
+                <option value="placeholder" disabled>
                   Odaberi aranžman
                 </option>
 
@@ -710,18 +730,7 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
         </>
       )}
 
-      <FormRow label="Avans" error={errors?.avans?.message}>
-        <Input
-          type="number"
-          id="avans"
-          disabled={isWorking}
-          placeholder="Avans"
-          {...register("avans", {
-            required: "Obavezno polje",
-          })}
-        />
-      </FormRow>
-      {!isDnevniRafting && !isSator && !isKampKucica && (
+      {!isDnevniRafting && !isSator && !isKampKucica && brojNocenja > 0 && (
         <>
           <span style={{ fontWeight: "500" }}>
             Slobodni bungalovi za ovaj datum:
@@ -793,6 +802,19 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
           )}
         </>
       )}
+
+      <FormRow label="Avans" error={errors?.avans?.message}>
+        <Input
+          type="number"
+          id="avans"
+          disabled={isWorking}
+          placeholder="Avans"
+          {...register("avans", {
+            required: "Obavezno polje",
+          })}
+        />
+      </FormRow>
+
       <FormRow label="Popust(€)" error={errors?.popust?.message}>
         <Input
           type="number"

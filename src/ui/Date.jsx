@@ -14,7 +14,7 @@ const Label = styled.p`
   font-weight: 500;
 `;
 
-const StyledDatePickerInput = styled.input`
+export const StyledDatePickerInput = styled.input`
   padding: 0.8rem 1.2rem;
   border: 1px solid var(--color-grey-300);
   background-color: var(--color-grey-0);

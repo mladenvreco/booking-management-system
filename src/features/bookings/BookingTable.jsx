@@ -20,7 +20,7 @@ function BookingTable({ searchTerm, startDate, endDate, showActions = true }) {
 
   if (isLoading) return <Spinner />;
 
-  if (!bookings.length) return <Empty resourceName={"rezervacija"} />;
+  // if (!bookings.length) return <Empty resourceName={"rezervacija"} />;
 
   return (
     <Menus>

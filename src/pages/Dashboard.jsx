@@ -42,8 +42,8 @@ function Dashboard() {
   }
 
   if (isLoading) return <Spinner />;
-  if (!bookings || bookings.length === 0)
-    return <Empty resourceName="rezervacija" />;
+  // if (!bookings || bookings.length === 0)
+  //   return <Empty resourceName="rezervacija" />;
 
   return (
     <>

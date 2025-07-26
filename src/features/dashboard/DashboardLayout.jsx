@@ -14,7 +14,7 @@ const StyledDashboardLayout = styled.div`
 function DashboardLayout({ bookings, startDate, endDate }) {
   // Optionally, you can show a spinner if bookings is undefined/null (loading state handled in parent)
   if (!bookings) return <Spinner />;
-  if (bookings.length === 0) return <Empty resourceName="rezervacija" />;
+  // if (bookings.length === 0) return <Empty resourceName="rezervacija" />;
 
   return (
     <div>
