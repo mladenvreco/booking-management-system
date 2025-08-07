@@ -1,8 +1,10 @@
+import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import Button from "./Button";
 import "../styles/datepicker.css";
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,7 +16,19 @@ const Label = styled.p`
   font-weight: 500;
 `;
 
-export const StyledDatePickerInput = styled.input`
+export const StyledDatePickerInput = React.forwardRef(
+  ({ value, onClick, placeholder, readOnly }, ref) => (
+    <StyledInput
+      onClick={onClick}
+      value={value}
+      placeholder={placeholder}
+      readOnly={readOnly}
+      ref={ref}
+    />
+  )
+);
+
+const StyledInput = styled.input`
   padding: 0.8rem 1.2rem;
   border: 1px solid var(--color-grey-300);
   background-color: var(--color-grey-0);
@@ -60,7 +74,7 @@ function DateComponent({
         endDate={endDate}
         placeholderText="Početni datum"
         dateFormat="dd.MM"
-        customInput={<StyledDatePickerInput />}
+        customInput={<StyledDatePickerInput readOnly />}
       />
 
       <DatePicker
@@ -72,7 +86,7 @@ function DateComponent({
         minDate={startDate}
         placeholderText="Krajnji datum"
         dateFormat="dd.MM"
-        customInput={<StyledDatePickerInput />}
+        customInput={<StyledDatePickerInput readOnly />}
       />
 
       <Button variation="secondary" size="small" onClick={resetDates}>
