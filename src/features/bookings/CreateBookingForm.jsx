@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { createEditBooking } from "../../services/apiBookings";
 import styled from "styled-components";
 import supabase from "../../services/supabase";
-import { StyledDatePickerInput } from "../../ui/Date";
+import { StyledDatePickerInput } from "/src/ui/Date.jsx";
 
 const SelectWrapper = styled.div`
   width: 100%;
@@ -34,7 +34,6 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
     if (!bookingToEdit.bungalovi || bookingToEdit.bungalovi.length === 0)
       return;
 
-    // Generiši stare datume na osnovu originalnih podataka iz rezervacije
     const originalStartDate = new Date(bookingToEdit.datumDolaska);
     const originalEndDate = new Date(bookingToEdit.datumOdlaska);
     const originalDates = eachDayOfInterval({
@@ -42,10 +41,8 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
       end: addDays(originalEndDate, -1),
     }).map((date) => format(date, "yyyy-MM-dd"));
 
-    // Ukloni stare datume iz svih bungalova koji su bili u rezervaciji
     for (const bungalov of bookingToEdit.bungalovi) {
       try {
-        // Dohvati trenutne zauzete datume za bungalov
         const { data: cabinData, error: fetchError } = await supabase
           .from("bungalovi")
           .select("zauzetnadatume")
@@ -60,12 +57,10 @@ function CreateBookingForm({ onCloseModal, bookingToEdit = {} }) {
           continue;
         }
 
-        // Ukloni stare datume rezervacije
         const updatedDates = (cabinData.zauzetnadatume || []).filter(
           (date) => !originalDates.includes(date)
         );
 
-        // Ažuriraj bazu podataka
         const { error: updateError } = await supabase
           .from("bungalovi")
           .update({ zauzetnadatume: updatedDates })

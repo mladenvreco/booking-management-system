@@ -16,18 +16,7 @@ const Label = styled.p`
   font-weight: 500;
 `;
 
-export const StyledDatePickerInput = React.forwardRef(
-  ({ value, onClick, placeholder, readOnly }, ref) => (
-    <StyledInput
-      onClick={onClick}
-      value={value}
-      placeholder={placeholder}
-      readOnly={readOnly}
-      ref={ref}
-    />
-  )
-);
-
+// Stilizovani input
 const StyledInput = styled.input`
   padding: 0.8rem 1.2rem;
   border: 1px solid var(--color-grey-300);
@@ -49,6 +38,23 @@ const StyledInput = styled.input`
     max-width: 20rem;
   }
 `;
+
+// Custom input koji sprečava fokus (tastaturu)
+export const StyledDatePickerInput = React.forwardRef(
+  ({ value, onClick, placeholder }, ref) => (
+    <StyledInput
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(); // otvara datepicker
+      }}
+      onFocus={(e) => e.target.blur()} // sprečava otvaranje tastature
+      value={value}
+      placeholder={placeholder}
+      readOnly
+      ref={ref}
+    />
+  )
+);
 
 function DateComponent({
   children,
@@ -74,7 +80,7 @@ function DateComponent({
         endDate={endDate}
         placeholderText="Početni datum"
         dateFormat="dd.MM"
-        customInput={<StyledDatePickerInput readOnly />}
+        customInput={<StyledDatePickerInput />}
       />
 
       <DatePicker
@@ -86,7 +92,7 @@ function DateComponent({
         minDate={startDate}
         placeholderText="Krajnji datum"
         dateFormat="dd.MM"
-        customInput={<StyledDatePickerInput readOnly />}
+        customInput={<StyledDatePickerInput />}
       />
 
       <Button variation="secondary" size="small" onClick={resetDates}>
